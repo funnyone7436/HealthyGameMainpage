@@ -12,8 +12,7 @@ const LERP_POS = 0.2
 const LERP_SCALE = 0.2
 const TARGET_VOL = 0.5
 const CONTENT_Y = 2.0
-const BASE = import.meta.env.BASE_URL; // works locally and on GitHub Pages
-
+const BASE = import.meta.env.BASE_URL // works locally and on GitHub Pages
 
 /* ===== Toggle the rainbow waves on/off here ===== */
 const SHOW_WAVES = false // <- set true to show waves, false to hide
@@ -470,6 +469,26 @@ function GameLinks({ games }) {
   )
 }
 
+/* ================ Bottom-right Open Source badge ================= */
+function GitHubBadge() {
+  return (
+    <a
+      className="gh-badge"
+      href="https://github.com/funnyone7436/HealthyGameMainpage"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Open Source on GitHub: HealthyGameMainpage"
+    >
+      <span className="gh-chip">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M8 .2A7.8 7.8 0 0 0 .1 8a7.8 7.8 0 0 0 5.3 7.4c.4.1.5-.2.5-.4v-1.6c-2.2.5-2.7-1-2.7-1-.4-1-1-1.3-1-1.3-.8-.5.1-.5.1-.5.9.1 1.4 1 1.4 1 .8 1.4 2.2 1 2.7.7.1-.6.3-1 .5-1.2-1.8-.2-3.6-.9-3.6-4a3.1 3.1 0 0 1 .8-2.2c-.1-.2-.3-.9 0-1.9 0 0 .7-.2 2.2.8a7.4 7.4 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.3 1 .1 1.7 0 1.9.5.6.8 1.3.8 2.2 0 3.1-1.8 3.8-3.6 4 .3.3.6.8.6 1.6v2.4c0 .2.2.5.6.4A7.8 7.8 0 0 0 15.9 8 7.8 7.8 0 0 0 8 .2Z"/>
+        </svg>
+        Open Source
+      </span>
+    </a>
+  )
+}
+
 /* ========================= App ========================= */
 export default function App() {
   const audioRef = useRef(null)
@@ -498,8 +517,6 @@ export default function App() {
     rimEnabled: false,
     rimColor: '#ffffff',
     rimIntensity: 0.0,
-    rimAzimuth: 220,
-    rimElevation: 25,
   }), [])
 
   const [env, setEnv] = useState(() => ({ ...defaults }))
@@ -592,7 +609,7 @@ export default function App() {
 
   return (
     <>
-      {/* --- Styles: sparkle chips + SINGLE-COLUMN title tooltip --- */}
+      {/* --- Styles: sparkle chips + title tooltip + GitHub badge --- */}
       <style>{`
         .sparkle-link__chip{
           position: relative;
@@ -653,20 +670,17 @@ export default function App() {
         .sparkle:nth-child(11){--x:-38px;--y:-12px; --d:600;}
         .sparkle:nth-child(12){--x:8px; --y:-22px; --d:660;}
 
-        /* ===== Title tooltip (SINGLE COLUMN, compact) ===== */
+        /* ===== Title tooltip (single column, compact) ===== */
         .site-title{ position:fixed; inset:auto; }
         .site-title__bubble{
           position: absolute;
           left: 50%;
           top: calc(100% + 10px);
           transform: translateX(-50%) translateY(4px) scale(.98);
-
           width: clamp(320px, 58vw, 720px);
           max-width: 92vw;
-
           font-size: clamp(12px, 0.9vw + 9px, 14px);
           line-height: 1.28;
-
           padding: 12px 14px;
           border-radius: 12px;
           color: #fff;
@@ -678,15 +692,11 @@ export default function App() {
           z-index: 31;
           white-space: normal;
           text-align: left;
-
-          /* force SINGLE column + nicer word handling */
           column-count: 1 !important;
           column-gap: 0 !important;
           hyphens: none;
           -webkit-hyphens: none;
           word-break: normal;
-
-          /* show whole text by default */
           max-height: none;
           overflow: visible;
         }
@@ -706,6 +716,34 @@ export default function App() {
         }
         @media (prefers-reduced-motion: reduce){
           .site-title__bubble{ transition: opacity .001s linear; }
+        }
+
+        /* ===== Bottom-right GitHub badge ===== */
+        .gh-badge{
+          position: fixed;
+          right: 16px;
+          bottom: 16px;
+          z-index: 40;
+          text-decoration: none;
+          pointer-events: auto;
+        }
+        .gh-chip{
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 12px;
+          border-radius: 12px;
+          font: 700 13px/1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+          color: #fff;
+          background: linear-gradient(135deg, rgba(0,0,0,.65), rgba(0,0,0,.35));
+          box-shadow: 0 6px 18px rgba(0,0,0,.25);
+          transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+          backdrop-filter: blur(4px);
+        }
+        .gh-badge:hover .gh-chip{
+          transform: translateY(-1px);
+          box-shadow: 0 10px 26px rgba(0,0,0,.28);
+          background: linear-gradient(135deg, rgba(0,0,0,.75), rgba(0,0,0,.42));
         }
       `}</style>
 
@@ -742,7 +780,7 @@ export default function App() {
         </span>
       </div>
 
-      {/* --- List rendered from GAMES (Zombie included) --- */}
+      {/* --- List rendered from GAMES --- */}
       <GameLinks games={GAMES} />
 
       {/* audio UI */}
@@ -752,6 +790,9 @@ export default function App() {
         controls loop autoPlay playsInline
         style={{ position:'fixed', bottom:16, left:16, background:'rgba(255,255,255,0.9)', borderRadius:8, padding:4, zIndex:10 }}
       />
+
+      {/* bottom-right GitHub badge */}
+      <GitHubBadge />
 
       <Canvas
         style={{ position:'fixed', inset:0, touchAction: 'none' }}
