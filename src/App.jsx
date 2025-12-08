@@ -492,9 +492,6 @@ function GameDrawer({ games }) {
           userSelect: 'none',
           fontWeight: 700,
           letterSpacing: 1,
-          maxHeight: '80vh',
-          overflowY: 'auto',          
-        }}
       >
         Games
       </div>
@@ -517,6 +514,12 @@ function GameDrawer({ games }) {
           flexDirection: 'column',
           gap: 10,
           zIndex: 50,  // ensures panel covers behind UI
+          /* ✅ FIXED: scrolling enabled */
+          maxHeight: '80vh',
+          overflowY: 'auto',
+
+          /* Optional: show scrollbar nicely */
+          scrollbarWidth: 'thin',
         }}
       >
         {games.map((g) => (
