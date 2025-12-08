@@ -451,7 +451,7 @@ function GameDrawer({ games }) {
     <div
       style={{
         position: 'fixed',
-        top: '35%',       // moved upward (change as needed)
+        top: '20%',       // moved upward (change as needed)
         left: 0,
         zIndex: 40,
         pointerEvents: 'auto',
@@ -486,7 +486,7 @@ function GameDrawer({ games }) {
         style={{
           position: 'absolute',
           top: 0,
-          left: open ? 120 : -260,
+          left: open ? 0 : -260,
           width: 260,
           padding: '14px 12px',
           background: 'rgba(0,0,0,0.65)',
