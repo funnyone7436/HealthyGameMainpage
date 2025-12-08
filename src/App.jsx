@@ -444,7 +444,6 @@ function SparkleLink({ href, children, label = 'Open link', size = 'md' }) {
   )
 }
 
-/* ================ Compact list of links rendered from GAMES ================ */
 function GameDrawer({ games }) {
   const [open, setOpen] = useState(false)
 
@@ -452,24 +451,21 @@ function GameDrawer({ games }) {
     <div
       style={{
         position: 'fixed',
-        top: '50%',
+        top: '35%',       // moved upward (change as needed)
         left: 0,
-        transform: 'translateY(-50%)',
         zIndex: 40,
         pointerEvents: 'auto',
       }}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      {/* The vertical tab */}
+      {/* Horizontal tab */}
       <div
         style={{
-          width: 40,
-          height: 120,
+          width: 120,
+          height: 40,
           background: 'linear-gradient(135deg, rgba(0,0,0,.55), rgba(0,0,0,.25))',
           color: '#fff',
-          writingMode: 'vertical-rl',
-          textOrientation: 'mixed',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -490,7 +486,7 @@ function GameDrawer({ games }) {
         style={{
           position: 'absolute',
           top: 0,
-          left: open ? 40 : -260,   // slide effect
+          left: open ? 120 : -260,
           width: 260,
           padding: '14px 12px',
           background: 'rgba(0,0,0,0.65)',
@@ -502,6 +498,7 @@ function GameDrawer({ games }) {
           display: 'flex',
           flexDirection: 'column',
           gap: 10,
+          zIndex: 50,  // ensures panel covers behind UI
         }}
       >
         {games.map((g) => (
