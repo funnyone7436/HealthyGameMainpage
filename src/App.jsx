@@ -24,6 +24,21 @@ const GAMES = [
   { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/' },
   { title: 'Rainbow Caterpillar Game', href: 'https://funnyone7436.github.io/Dancing-With-Hungry-Rainbow-Caterpillar/' },
   { title: 'Dancing With Fallen Leaves', href: 'https://funnyone7436.github.io/Dancing-With-Fallen-Leaves/' },
+  { title: 'Jumping Zombie Game', href: 'https://funnyone7436.github.io/zombie-jump-game/' },
+  { title: 'Jumping Minecraft Game', href: 'https://funnyone7436.github.io/Dance-with-Minecraft-block/' },
+  { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/' },
+  { title: 'Rainbow Caterpillar Game', href: 'https://funnyone7436.github.io/Dancing-With-Hungry-Rainbow-Caterpillar/' },
+  { title: 'Dancing With Fallen Leaves', href: 'https://funnyone7436.github.io/Dancing-With-Fallen-Leaves/' },
+  { title: 'Jumping Zombie Game', href: 'https://funnyone7436.github.io/zombie-jump-game/' },
+  { title: 'Jumping Minecraft Game', href: 'https://funnyone7436.github.io/Dance-with-Minecraft-block/' },
+  { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/' },
+  { title: 'Rainbow Caterpillar Game', href: 'https://funnyone7436.github.io/Dancing-With-Hungry-Rainbow-Caterpillar/' },
+  { title: 'Dancing With Fallen Leaves', href: 'https://funnyone7436.github.io/Dancing-With-Fallen-Leaves/' },
+  { title: 'Jumping Zombie Game', href: 'https://funnyone7436.github.io/zombie-jump-game/' },
+  { title: 'Jumping Minecraft Game', href: 'https://funnyone7436.github.io/Dance-with-Minecraft-block/' },
+  { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/' },
+  { title: 'Rainbow Caterpillar Game', href: 'https://funnyone7436.github.io/Dancing-With-Hungry-Rainbow-Caterpillar/' },
+  { title: 'Dancing With Fallen Leaves', href: 'https://funnyone7436.github.io/Dancing-With-Fallen-Leaves/' },
 ]
 
 /* ========================= Helpers =========================== */
@@ -477,6 +492,8 @@ function GameDrawer({ games }) {
           userSelect: 'none',
           fontWeight: 700,
           letterSpacing: 1,
+          maxHeight: '80vh',
+          overflowY: 'auto',          
         }}
       >
         Games
