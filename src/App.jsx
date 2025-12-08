@@ -445,29 +445,75 @@ function SparkleLink({ href, children, label = 'Open link', size = 'md' }) {
 }
 
 /* ================ Compact list of links rendered from GAMES ================ */
-function GameLinks({ games }) {
+function GameDrawer({ games }) {
+  const [open, setOpen] = useState(false)
+
   return (
-    <nav
-      aria-label="Games"
+    <div
       style={{
         position: 'fixed',
-        top: 58, // sits below the main title
-        left: 12,
-        zIndex: 35,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 8,
+        top: '50%',
+        left: 0,
+        transform: 'translateY(-50%)',
+        zIndex: 40,
         pointerEvents: 'auto',
       }}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
     >
-      {games.map((g) => (
-        <SparkleLink key={g.href} href={g.href} label={g.title} size="sm">
-          🎮 {g.title}
-        </SparkleLink>
-      ))}
-    </nav>
+      {/* The vertical tab */}
+      <div
+        style={{
+          width: 40,
+          height: 120,
+          background: 'linear-gradient(135deg, rgba(0,0,0,.55), rgba(0,0,0,.25))',
+          color: '#fff',
+          writingMode: 'vertical-rl',
+          textOrientation: 'mixed',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderTopRightRadius: 10,
+          borderBottomRightRadius: 10,
+          cursor: 'pointer',
+          boxShadow: '2px 4px 12px rgba(0,0,0,0.25)',
+          userSelect: 'none',
+          fontWeight: 700,
+          letterSpacing: 1,
+        }}
+      >
+        Games
+      </div>
+
+      {/* The sliding drawer */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: open ? 40 : -260,   // slide effect
+          width: 260,
+          padding: '14px 12px',
+          background: 'rgba(0,0,0,0.65)',
+          borderTopRightRadius: 12,
+          borderBottomRightRadius: 12,
+          boxShadow: '4px 6px 18px rgba(0,0,0,0.35)',
+          backdropFilter: 'blur(6px)',
+          transition: 'left 0.25s ease',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 10,
+        }}
+      >
+        {games.map((g) => (
+          <SparkleLink key={g.href} href={g.href} size="sm" label={g.title}>
+            🎮 {g.title}
+          </SparkleLink>
+        ))}
+      </div>
+    </div>
   )
 }
+
 
 /* ================ Bottom-right Open Source badge ================= */
 function GitHubBadge() {
@@ -781,7 +827,7 @@ export default function App() {
       </div>
 
       {/* --- List rendered from GAMES --- */}
-      <GameLinks games={GAMES} />
+      <GameDrawer games={GAMES} />
 
       {/* audio UI */}
       <audio
