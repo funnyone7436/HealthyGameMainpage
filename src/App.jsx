@@ -467,7 +467,7 @@ function GameDrawer({ games }) {
     <div
       style={{
         position: 'fixed',
-        top: '20%',       // moved upward (change as needed)
+        top: '5%',       // moved upward (change as needed)
         left: 0,
         zIndex: 40,
         pointerEvents: 'auto',
@@ -492,6 +492,7 @@ function GameDrawer({ games }) {
           userSelect: 'none',
           fontWeight: 700,
           letterSpacing: 1,
+        }}
       >
         Games
       </div>
