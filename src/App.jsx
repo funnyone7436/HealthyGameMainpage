@@ -467,70 +467,79 @@ function GameDrawer({ games }) {
     <div
       style={{
         position: 'fixed',
-        top: 12,       // moved upward (change as needed)
+        top: 12, // aligns with the title
         left: 0,
         zIndex: 40,
         pointerEvents: 'auto',
+        display: 'flex',
+        alignItems: 'center',
       }}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      {/* Horizontal tab */}
+      {/* Games Tab - colorful, rounded, kid-friendly */}
       <div
         style={{
-          width: 120,
-          height: 40,
-          background: 'linear-gradient(135deg, rgba(0,0,0,.55), rgba(0,0,0,.25))',
+          width: 135,
+          height: 48,
+          background: 'linear-gradient(135deg, #FFAA33, #FFDD55)',
           color: '#fff',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          borderTopRightRadius: 10,
-          borderBottomRightRadius: 10,
+          borderTopRightRadius: 20,
+          borderBottomRightRadius: 20,
           cursor: 'pointer',
-          boxShadow: '2px 4px 12px rgba(0,0,0,0.25)',
+          boxShadow: '0 6px 18px rgba(0,0,0,0.25)',
           userSelect: 'none',
-          fontWeight: 700,
-          letterSpacing: 1,
+          fontWeight: 800,
+          fontSize: 18,
+          letterSpacing: 0.5,
+          fontFamily: 'Comic Sans MS, Nunito, system-ui',
+          border: '3px solid rgba(255,255,255,0.8)',
         }}
       >
-        Games
+        🎮 Games
       </div>
 
-      {/* The sliding drawer */}
+      {/* Sliding colorful drawer */}
       <div
         style={{
           position: 'absolute',
           top: 0,
-          left: open ? 0 : -260,
-          width: 'auto',             // 🔥 Auto fits text, no bottom scroll
-          minWidth: 260,             // Minimum to look nice
-          maxWidth: 420,             // Optional: prevent oversize
-          maxHeight: '86vh',         // 🔥 ONLY vertical scrolling
+          left: open ? 135 : -300,  // slides from behind tab
+          width: 'auto',
+          minWidth: 260,
+          maxWidth: 420,
+          maxHeight: '86vh',
           overflowY: 'auto',
-          overflowX: 'hidden',       // 🔥 NO bottom scrollbar
-          padding: '14px 12px',
-          background: 'rgba(0,0,0,0.65)',
-          borderTopRightRadius: 12,
-          borderBottomRightRadius: 12,
-          boxShadow: '4px 6px 18px rgba(0,0,0,0.35)',
-          backdropFilter: 'blur(6px)',
+          overflowX: 'hidden',
+
+          padding: '18px 20px',
+
+          /* 🌈 COLORFUL soft-glass drawer */
+          background: 'linear-gradient(135deg, rgba(255,200,80,0.85), rgba(255,140,200,0.85))',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+
+          borderTopRightRadius: 28,
+          borderBottomRightRadius: 28,
+          borderTopLeftRadius: 28,
+          borderBottomLeftRadius: 28,
+
+          boxShadow: '0px 8px 26px rgba(0,0,0,0.20)',
+          border: '4px solid rgba(255,255,255,0.9)',
+
           transition: 'left 0.25s ease',
           display: 'flex',
           flexDirection: 'column',
-          gap: 10,
-          zIndex: 50,  // ensures panel covers behind UI
-          /* ✅ FIXED: scrolling enabled */
-          maxHeight: '80vh',
-          overflowY: 'auto',
-
-          /* Optional: show scrollbar nicely */
-          scrollbarWidth: 'thin',
+          gap: 12,
+          zIndex: 50,
         }}
       >
         {games.map((g) => (
           <SparkleLink key={g.href} href={g.href} size="sm" label={g.title}>
-            🎮 {g.title}
+            🎈 {g.title}
           </SparkleLink>
         ))}
       </div>
