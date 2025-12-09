@@ -467,7 +467,7 @@ function GameDrawer({ games }) {
     <div
       style={{
         position: 'fixed',
-        top: '5%',       // moved upward (change as needed)
+        top: 12,       // moved upward (change as needed)
         left: 0,
         zIndex: 40,
         pointerEvents: 'auto',
@@ -503,7 +503,12 @@ function GameDrawer({ games }) {
           position: 'absolute',
           top: 0,
           left: open ? 0 : -260,
-          width: 260,
+          width: 'auto',             // 🔥 Auto fits text, no bottom scroll
+          minWidth: 260,             // Minimum to look nice
+          maxWidth: 420,             // Optional: prevent oversize
+          maxHeight: '86vh',         // 🔥 ONLY vertical scrolling
+          overflowY: 'auto',
+          overflowX: 'hidden',       // 🔥 NO bottom scrollbar
           padding: '14px 12px',
           background: 'rgba(0,0,0,0.65)',
           borderTopRightRadius: 12,
