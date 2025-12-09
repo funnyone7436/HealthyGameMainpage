@@ -19,26 +19,12 @@ const SHOW_WAVES = false // <- set true to show waves, false to hide
 
 /* ======= Editable list of game titles & URLs (add more here!) ======= */
 const GAMES = [
-  { title: 'Jumping Zombie Game', href: 'https://funnyone7436.github.io/zombie-jump-game/' },
-  { title: 'Jumping Minecraft Game', href: 'https://funnyone7436.github.io/Dance-with-Minecraft-block/' },
-  { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/' },
-  { title: 'Rainbow Caterpillar Game', href: 'https://funnyone7436.github.io/Dancing-With-Hungry-Rainbow-Caterpillar/' },
   { title: 'Dancing With Fallen Leaves', href: 'https://funnyone7436.github.io/Dancing-With-Fallen-Leaves/' },
-  { title: 'Jumping Zombie Game', href: 'https://funnyone7436.github.io/zombie-jump-game/' },
+  { title: 'Rain In Halloween', href: 'https://funnyone7436.github.io/Rain-In-Halloween/' },
+  { title: 'Rainbow Caterpillar Game', href: 'https://funnyone7436.github.io/Dancing-With-Hungry-Rainbow-Caterpillar/' }, 
+  { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/' },   
   { title: 'Jumping Minecraft Game', href: 'https://funnyone7436.github.io/Dance-with-Minecraft-block/' },
-  { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/' },
-  { title: 'Rainbow Caterpillar Game', href: 'https://funnyone7436.github.io/Dancing-With-Hungry-Rainbow-Caterpillar/' },
-  { title: 'Dancing With Fallen Leaves', href: 'https://funnyone7436.github.io/Dancing-With-Fallen-Leaves/' },
   { title: 'Jumping Zombie Game', href: 'https://funnyone7436.github.io/zombie-jump-game/' },
-  { title: 'Jumping Minecraft Game', href: 'https://funnyone7436.github.io/Dance-with-Minecraft-block/' },
-  { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/' },
-  { title: 'Rainbow Caterpillar Game', href: 'https://funnyone7436.github.io/Dancing-With-Hungry-Rainbow-Caterpillar/' },
-  { title: 'Dancing With Fallen Leaves', href: 'https://funnyone7436.github.io/Dancing-With-Fallen-Leaves/' },
-  { title: 'Jumping Zombie Game', href: 'https://funnyone7436.github.io/zombie-jump-game/' },
-  { title: 'Jumping Minecraft Game', href: 'https://funnyone7436.github.io/Dance-with-Minecraft-block/' },
-  { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/' },
-  { title: 'Rainbow Caterpillar Game', href: 'https://funnyone7436.github.io/Dancing-With-Hungry-Rainbow-Caterpillar/' },
-  { title: 'Dancing With Fallen Leaves', href: 'https://funnyone7436.github.io/Dancing-With-Fallen-Leaves/' },
 ]
 
 /* ========================= Helpers =========================== */
