@@ -13,7 +13,7 @@ const LERP_SCALE = 0.2
 const TARGET_VOL = 0.5
 const CONTENT_Y = 2.0
 const BASE = import.meta.env.BASE_URL // works locally and on GitHub Pages
-
+ 
 /* ===== Toggle the rainbow waves on/off here ===== */
 const SHOW_WAVES = false // <- set true to show waves, false to hide
 
