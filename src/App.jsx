@@ -467,7 +467,7 @@ function GameDrawer({ games }) {
     <div
       style={{
         position: 'fixed',
-        top: 12, // aligns with the title
+        top: 16,
         left: 0,
         zIndex: 40,
         pointerEvents: 'auto',
@@ -477,12 +477,12 @@ function GameDrawer({ games }) {
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      {/* Games Tab - colorful, rounded, kid-friendly */}
+      {/* Games Tab – restore old font + simpler style */}
       <div
         style={{
           width: 135,
           height: 48,
-          background: 'linear-gradient(135deg, #FFAA33, #FFDD55)',
+          background: '#ff9a3c',
           color: '#fff',
           display: 'flex',
           justifyContent: 'center',
@@ -492,56 +492,60 @@ function GameDrawer({ games }) {
           cursor: 'pointer',
           boxShadow: '0 6px 18px rgba(0,0,0,0.25)',
           userSelect: 'none',
-          fontWeight: 800,
+          fontWeight: 700,
           fontSize: 18,
-          letterSpacing: 0.5,
-          fontFamily: 'Comic Sans MS, Nunito, system-ui',
+
+          // ⬅️ old font restored
+          fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
+
           border: '3px solid rgba(255,255,255,0.8)',
         }}
       >
-        🎮 Games
+        Games
       </div>
 
-      {/* Sliding colorful drawer */}
+      {/* Drawer panel */}
       <div
         style={{
           position: 'absolute',
           top: 0,
-          left: open ? 135 : -300,  // slides from behind tab
-          width: 'auto',
-          minWidth: 260,
-          maxWidth: 420,
+          left: open ? 0 : -300,
+          width: 280,
           maxHeight: '86vh',
-          overflowY: 'auto',
-          overflowX: 'hidden',
 
-          padding: '18px 20px',
+          /* Important: put overflow INSIDE a rounded container */
+          overflow: 'hidden',
+          borderRadius: 24,
 
-          /* 🌈 COLORFUL soft-glass drawer */
-          background: 'linear-gradient(135deg, rgba(255,200,80,0.85), rgba(255,140,200,0.85))',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-
-          borderTopRightRadius: 28,
-          borderBottomRightRadius: 28,
-          borderTopLeftRadius: 28,
-          borderBottomLeftRadius: 28,
-
+          /* Soft glass look */
+          background: 'rgba(255,255,255,0.45)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: '3px solid rgba(255,255,255,0.9)',
           boxShadow: '0px 8px 26px rgba(0,0,0,0.20)',
-          border: '4px solid rgba(255,255,255,0.9)',
 
           transition: 'left 0.25s ease',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 12,
           zIndex: 50,
         }}
       >
-        {games.map((g) => (
-          <SparkleLink key={g.href} href={g.href} size="sm" label={g.title}>
-            🎈 {g.title}
-          </SparkleLink>
-        ))}
+        {/* Inner scrolling content */}
+        <div
+          style={{
+            padding: '18px 20px',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            maxHeight: '86vh',
+
+            /* This keeps scrollbar INSIDE the rounded window */
+            scrollbarWidth: 'thin',
+          }}
+        >
+          {games.map((g) => (
+            <SparkleLink key={g.href} href={g.href} size="sm">
+              🎈 {g.title}
+            </SparkleLink>
+          ))}
+        </div>
       </div>
     </div>
   )
