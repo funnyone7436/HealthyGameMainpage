@@ -19,6 +19,7 @@ const SHOW_WAVES = false // <- set true to show waves, false to hide
 
 /* ======= Editable list of game titles & URLs (add more here!) ======= */
 const GAMES = [
+  { title: 'Snow In Christmas', href: 'https://funnyone7436.github.io/Snow-In-Christmas/' },
   { title: 'Dancing With Fallen Leaves', href: 'https://funnyone7436.github.io/Dancing-With-Fallen-Leaves/' },
   { title: 'Rain In Halloween', href: 'https://funnyone7436.github.io/Rain-In-Halloween/' },
   { title: 'Rainbow Caterpillar Game', href: 'https://funnyone7436.github.io/Dancing-With-Hungry-Rainbow-Caterpillar/' }, 
