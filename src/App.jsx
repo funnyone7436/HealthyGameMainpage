@@ -2,7 +2,7 @@
 import React, { useMemo, useState, useEffect, useRef, Suspense } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, Line, useGLTF, Environment, ContactShadows } from '@react-three/drei'
-import * as THREE from 'three'
+import * as THREE from 'three' 
 
 /* ========================= Constants ========================= */
 const RADIUS = 18
