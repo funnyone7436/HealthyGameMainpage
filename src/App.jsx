@@ -690,6 +690,17 @@ export default function App() {
     <>
       {/* Styles: sparkle chips + GitHub badge */}
       <style>{`
+        /* ===== Jumping Words Animation ===== */
+        @keyframes bouncy-word {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); } 
+        }
+        .jump-word {
+          display: inline-block; 
+          font-size: 1.25em; 
+          animation: bouncy-word 1.5s ease-in-out infinite;
+          white-space: nowrap; 
+        }
         .sparkle-link__chip{
           position: relative;
           display: inline-flex;
@@ -852,10 +863,17 @@ export default function App() {
         aria-describedby="siteTitleTooltip"
       >
         Healthy Games for Kids
-        <span id="siteTitleTooltip" className="site-title__bubble" role="tooltip">
-          Designed with kids’ well-being in mind: it promotes physical movement, balanced short play,
-          and safe content without violence, harmful themes, virtual coins. It’s ad-free, virus-free,
-          and fully open-source on GitHub — plus families can even create their own games from it.
+		<span id="siteTitleTooltip" className="site-title__bubble" role="tooltip">
+          Designed with kids’ well-being in mind: 
+		  it promotes{' '}
+          <span className="jump-word" style={{ color: '#00FF7F', fontWeight: 'bold', animationDelay: '0.0s' }}>physical movement</span>,{' '}
+          <span className="jump-word" style={{ color: '#FF5E7E', fontWeight: 'bold', animationDelay: '0.2s' }}>interactive learning</span>,{' '}
+          <span className="jump-word" style={{ color: '#FFD700', fontWeight: 'bold', animationDelay: '0.4s' }}>balanced short play</span>, and{' '}
+          <span className="jump-word" style={{ color: '#00FFFF', fontWeight: 'bold', animationDelay: '0.6s' }}>safe content</span> without violence, harmful themes, or virtual coins. It’s{' '}
+          <span className="jump-word" style={{ color: '#FF69B4', fontWeight: 'bold', animationDelay: '0.8s' }}>ad-free</span>,{' '}
+          <span className="jump-word" style={{ color: '#FF4F8B', fontWeight: 'bold', animationDelay: '1.0s' }}>virus-free</span>,
+          and fully{' '}
+          <span className="jump-word" style={{ color: '#BA55D3', fontWeight: 'bold', animationDelay: '1.2s' }}>open-source</span> on GitHub — plus families can even create their own games from it.
         </span>
       </div>
 
