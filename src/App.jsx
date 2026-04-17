@@ -17,8 +17,10 @@ const BASE = import.meta.env.BASE_URL // works locally and on GitHub Pages
 /* ===== Toggle the rainbow waves on/off here ===== */
 const SHOW_WAVES = false // <- set true to show waves, false to hide
 
-/* ======= Editable list of game titles & URLs (add more here!) ======= */
-const GAMES = [
+/* ======= Editable lists of game titles & URLs ======= */
+const MOTION_GAMES = [
+  { title: 'Jump for Joy, Bloom for Spring!', href: 'https://funnyone7436.github.io/Flowers-In-Spring/' },
+  { title: 'Snow In Christmas(Add Sound Control)', href: 'https://funnyone7436.github.io/Up-and-down-The-Christmas-Gifts/' },
   { title: 'Snow In Christmas', href: 'https://funnyone7436.github.io/Snow-In-Christmas/' },
   { title: 'Dancing With Fallen Leaves', href: 'https://funnyone7436.github.io/Dancing-With-Fallen-Leaves/' },
   { title: 'Rain In Halloween', href: 'https://funnyone7436.github.io/Rain-In-Halloween/' },
@@ -26,6 +28,10 @@ const GAMES = [
   { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/' },   
   { title: 'Jumping Minecraft Game', href: 'https://funnyone7436.github.io/Dance-with-Minecraft-block/' },
   { title: 'Jumping Zombie Game', href: 'https://funnyone7436.github.io/zombie-jump-game/' },
+]
+
+const EDUCATION_GAMES = [
+  { title: 'Discover the US States', href: 'https://funnyone7436.github.io/US-Geo-State-Game/' },
 ]
 
 /* ========================= Helpers =========================== */
@@ -46,7 +52,7 @@ function validateEnv(obj, fallback) {
       'sunAzimuth','sunElevation','rimIntensity','rimAzimuth','rimElevation'
     ].includes(k)) safe[k] = Number(v)
     else if (k === 'fogType' && (v === 'linear' || v === 'exp2')) safe[k] = v
-    else if (k === 'envPreset') safe[k] = ALLOWED_PRESETS.includes(String(v)) ? String(v) : fallback.envPreset
+    else if (k === 'envPreset' && ALLOWED_PRESETS.includes(String(v))) safe[k] = String(v)
     else if (typeof v === 'string') safe[k] = v
   }
   return safe
@@ -310,7 +316,7 @@ function RimLight({ enabled, color='#ffffff', intensity=0, azimuth=220, elevatio
 function ConfigurableModelsRing({ audioRef, modelsSettings }) {
   const positions = useMemo(() => ringPositions(modelsSettings.length, RADIUS), [modelsSettings.length])
 
-  // Preload unique model files (safe: useGLTF.preload is a function, not a hook)
+  // Preload unique model files
   useEffect(() => {
     const unique = Array.from(new Set(modelsSettings.map(m => m.file)))
     unique.forEach(file => useGLTF.preload(`${BASE}objs/${file}`))
@@ -349,7 +355,7 @@ function ConfigurableModelsRing({ audioRef, modelsSettings }) {
     return () => { cancelled = true }
   }, [])
 
-  // Animation by audio (jump + stretch Y) relative to each model's yOffset
+  // Animation by audio relative to each model's yOffset
   useFrame(() => {
     if (!spec || !bandMax) return
     const audio = audioRef?.current
@@ -423,7 +429,7 @@ const ModelInstance = React.forwardRef(function ModelInstance(
   )
 })
 
-/* ================= Sparkle Link (supports small size) ================= */
+/* ================= Sparkle Link ================= */
 function SparkleLink({ href, children, label = 'Open link', size = 'md' }) {
   const count = 12
   const sizeClass = size === 'sm' ? 'sparkle-link--sm' : 'sparkle-link--md'
@@ -447,97 +453,100 @@ function SparkleLink({ href, children, label = 'Open link', size = 'md' }) {
   )
 }
 
-function GameDrawer({ games }) {
+/* ================= Configurable Game Drawer ================= */
+function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' }) {
   const [open, setOpen] = useState(false)
+  const isTopLeft = position === 'top-left'
 
   return (
     <div
       style={{
         position: 'fixed',
-        top: 16,
-        left: 0,
         zIndex: 40,
         pointerEvents: 'auto',
         display: 'flex',
         alignItems: 'center',
+        top: isTopLeft ? 16 : 'auto',
+        bottom: isTopLeft ? 'auto' : 80, // Moved up to 80px to clear the Open Source badge
+        left: isTopLeft ? 0 : 'auto',
+        right: isTopLeft ? 'auto' : 0,   // Flush to the right edge
+        flexDirection: isTopLeft ? 'row' : 'row-reverse',
       }}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      {/* Games Tab – restore old font + simpler style */}
-      <div
-        style={{
-          width: 135,
-          height: 48,
-          background: '#ff9a3c',
-          color: '#fff',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderTopRightRadius: 20,
-          borderBottomRightRadius: 20,
-          cursor: 'pointer',
-          boxShadow: '0 6px 18px rgba(0,0,0,0.25)',
-          userSelect: 'none',
-          fontWeight: 700,
-          fontSize: 18,
-
-          // ⬅️ old font restored
-          fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
-
-          border: '3px solid rgba(255,255,255,0.8)',
-        }}
-      >
-        Games
-      </div>
-
       {/* Drawer panel */}
       <div
         style={{
           position: 'absolute',
           top: 0,
-          left: open ? 0 : -300,
-          width: 280,
+          left: isTopLeft ? (open ? 0 : -600) : 'auto',
+          right: isTopLeft ? 'auto' : (open ? 0 : -600),
+          width: 'max-content',
+          maxWidth: '85vw',
           maxHeight: '86vh',
-
-          /* Important: put overflow INSIDE a rounded container */
-          overflow: 'hidden',
           borderRadius: 24,
-
-          /* Soft glass look */
           background: 'rgba(255,255,255,0.45)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           border: '3px solid rgba(255,255,255,0.9)',
           boxShadow: '0px 8px 26px rgba(0,0,0,0.20)',
-
-          transition: 'left 0.25s ease',
+          transition: isTopLeft ? 'left 0.3s ease-out' : 'right 0.3s ease-out',
           zIndex: 50,
+          overflow: 'hidden'
         }}
       >
         {/* Inner scrolling content */}
         <div
           style={{
-            padding: '18px 20px',
+            padding: '16px 24px',
             overflowY: 'auto',
             overflowX: 'hidden',
             maxHeight: '86vh',
-
-            /* This keeps scrollbar INSIDE the rounded window */
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px',
             scrollbarWidth: 'thin',
           }}
         >
           {games.map((g) => (
-            <SparkleLink key={g.href} href={g.href} size="sm">
-              🎈 {g.title}
-            </SparkleLink>
+            <div key={g.href} style={{ width: 'fit-content' }}>
+              <SparkleLink href={g.href} size="sm">
+                🎈 {g.title}
+              </SparkleLink>
+            </div>
           ))}
         </div>
+      </div>
+
+      {/* Tab */}
+      <div
+        style={{
+          width: 175, // Increased width to fit "Education Games" neatly
+          height: 48,
+          background: tabColor,
+          color: '#fff',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderTopRightRadius: isTopLeft ? 20 : 0,
+          borderBottomRightRadius: isTopLeft ? 20 : 0,
+          borderTopLeftRadius: isTopLeft ? 0 : 20,
+          borderBottomLeftRadius: isTopLeft ? 0 : 20,
+          cursor: 'pointer',
+          boxShadow: '0 6px 18px rgba(0,0,0,0.25)',
+          userSelect: 'none',
+          fontWeight: 700,
+          fontSize: 18,
+          fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
+          border: '3px solid rgba(255,255,255,0.8)',
+        }}
+      >
+        {label}
       </div>
     </div>
   )
 }
-
 
 /* ================ Bottom-right Open Source badge ================= */
 function GitHubBadge() {
@@ -563,7 +572,7 @@ function GitHubBadge() {
 export default function App() {
   const audioRef = useRef(null)
 
-  // Fallback defaults (no panel UI; preset locked to 'lobby')
+  // Fallback defaults (preset locked to 'lobby')
   const defaults = useMemo(() => ({
     skyTop: '#87CEE8', skyTopAlpha: 1,
     skyBottom: '#FFFFFF', skyBottomAlpha: 1,
@@ -649,25 +658,25 @@ export default function App() {
   /* ===== Base models list with per-axis scale + yOffset ===== */
   const baseModelsSettings = useMemo(() => ([
     { file: 'rocket.glb',           scale: { x: 2.0, y: 2.0, z: 2.0 }, rotYdeg: 0, yOffset: -1.0 },
-    { file: 'flowerblue.glb',       scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
-    { file: 'basketball.glb',       scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
-    { file: 'mushroomOrg.glb',      scale: { x: .80, y: .80, z: 0.80 }, rotYdeg: 0, yOffset: 0.0 },
-    { file: 'icecreamCha.glb',      scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: -1.6 },
+    { file: 'flowerblue.glb',        scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
+    { file: 'basketball.glb',        scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
+    { file: 'mushroomOrg.glb',       scale: { x: .80, y: .80, z: 0.80 }, rotYdeg: 0, yOffset: 0.0 },
+    { file: 'icecreamCha.glb',       scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: -1.6 },
     { file: 'watermelonYellow.glb', scale: { x: .80, y: .80, z: .80 }, rotYdeg: 0, yOffset: 0.0 },
     { file: 'sun.glb',              scale: 1.0,                               rotYdeg: 0, yOffset: 0.0 },
-    { file: 'moon.glb',             scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
-    { file: 'pencil.glb',           scale: { x: 0.5, y: 0.5, z: 0.5 }, rotYdeg: 0, yOffset: 0.0 },
-    { file: 'icecream1.glb',        scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: -1.6 },
-    { file: 'flowerRed.glb',        scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
-    { file: 'orange.glb',           scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
+    { file: 'moon.glb',              scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
+    { file: 'pencil.glb',            scale: { x: 0.5, y: 0.5, z: 0.5 }, rotYdeg: 0, yOffset: 0.0 },
+    { file: 'icecream1.glb',         scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: -1.6 },
+    { file: 'flowerRed.glb',         scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
+    { file: 'orange.glb',            scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
     { file: 'gem.glb',              scale: 1.0,                               rotYdeg: 0, yOffset: 0.0 },
-    { file: 'icecreamblue.glb',     scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: -1.6 },
-    { file: 'Soccer.glb',           scale: 1.0,                               rotYdeg: 0, yOffset: 0.0 },
-    { file: 'floweryellow.glb',     scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
-    { file: 'watermelon.glb',       scale: { x: .80, y: .80, z: .80 }, rotYdeg: 0, yOffset: 0.0 },
-    { file: 'mushroom1.glb',        scale: { x: .80, y: .80, z: 0.80 }, rotYdeg: 0, yOffset: 0.0 },
-    { file: 'flower.glb',           scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
-    { file: 'icecreampurple.glb',   scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: -1.6 },
+    { file: 'icecreamblue.glb',      scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: -1.6 },
+    { file: 'Soccer.glb',            scale: 1.0,                               rotYdeg: 0, yOffset: 0.0 },
+    { file: 'floweryellow.glb',      scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
+    { file: 'watermelon.glb',        scale: { x: .80, y: .80, z: .80 }, rotYdeg: 0, yOffset: 0.0 },
+    { file: 'mushroom1.glb',         scale: { x: .80, y: .80, z: 0.80 }, rotYdeg: 0, yOffset: 0.0 },
+    { file: 'flower.glb',            scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
+    { file: 'icecreampurple.glb',    scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: -1.6 },
   ]), [])
 
   // Duplicate until COUNT is reached (keeps order)
@@ -679,7 +688,7 @@ export default function App() {
 
   return (
     <>
-      {/* --- Styles: sparkle chips + title tooltip + GitHub badge --- */}
+      {/* Styles: sparkle chips + GitHub badge */}
       <style>{`
         .sparkle-link__chip{
           position: relative;
@@ -850,8 +859,16 @@ export default function App() {
         </span>
       </div>
 
-      {/* --- List rendered from GAMES --- */}
-      <GameDrawer games={GAMES} />
+      {/* --- Categorized Games Drawers --- */}
+      <GameDrawer games={MOTION_GAMES} label="Motion Games" position="top-left" />
+      
+      {/* Add your new tabColor here! */}
+      <GameDrawer 
+        games={EDUCATION_GAMES} 
+        label="Education Games" 
+        position="bottom-right" 
+        tabColor="#4a90e2" 
+      />
 
       {/* audio UI */}
       <audio
@@ -870,7 +887,7 @@ export default function App() {
         shadows
         gl={{ alpha: true }}
       >
-        {/* preset locked to 'lobby' */}
+        {/* Environment (locked to 'lobby') */}
         <Environment preset="lobby" background={false} intensity={parseFloat(env.envIntensity)} />
 
         <ExampleBackground
