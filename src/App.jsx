@@ -19,6 +19,7 @@ const SHOW_WAVES = false // <- set true to show waves, false to hide
 
 /* ======= Editable lists of game titles & URLs ======= */
 const MOTION_GAMES = [
+  { title: 'Pokemon Pinball Machine', href: 'https://funnyone7436.github.io/Pokemon-Pinball-Machine/' },
   { title: 'Jump for Joy, Bloom for Spring!', href: 'https://funnyone7436.github.io/Flowers-In-Spring/' },
   { title: 'Snow In Christmas(Add Sound Control)', href: 'https://funnyone7436.github.io/Up-and-down-The-Christmas-Gifts/' },
   { title: 'Snow In Christmas', href: 'https://funnyone7436.github.io/Snow-In-Christmas/' },
