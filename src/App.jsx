@@ -12,27 +12,27 @@ const LERP_POS = 0.2
 const LERP_SCALE = 0.2
 const TARGET_VOL = 0.5
 const CONTENT_Y = 2.0
-const BASE = import.meta.env.BASE_URL // works locally and on GitHub Pages
+const BASE = import.meta.env.BASE_URL 
  
 /* ===== Toggle the rainbow waves on/off here ===== */
-const SHOW_WAVES = false // <- set true to show waves, false to hide
+const SHOW_WAVES = false 
 
-/* ======= Editable lists of game titles & URLs ======= */
+/* ======= Editable lists of game titles, URLs, and Descriptions ======= */
 const MOTION_GAMES = [
-  { title: 'Pokemon Pinball Machine', href: 'https://funnyone7436.github.io/Pokemon-Pinball-Machine/' },
-  { title: 'Jump for Joy, Bloom for Spring!', href: 'https://funnyone7436.github.io/Flowers-In-Spring/' },
-  { title: 'Snow In Christmas(Add Sound Control)', href: 'https://funnyone7436.github.io/Up-and-down-The-Christmas-Gifts/' },
-  { title: 'Snow In Christmas', href: 'https://funnyone7436.github.io/Snow-In-Christmas/' },
-  { title: 'Dancing With Fallen Leaves', href: 'https://funnyone7436.github.io/Dancing-With-Fallen-Leaves/' },
-  { title: 'Rain In Halloween', href: 'https://funnyone7436.github.io/Rain-In-Halloween/' },
-  { title: 'Rainbow Caterpillar Game', href: 'https://funnyone7436.github.io/Dancing-With-Hungry-Rainbow-Caterpillar/' }, 
-  { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/' },   
-  { title: 'Jumping Minecraft Game', href: 'https://funnyone7436.github.io/Dance-with-Minecraft-block/' },
-  { title: 'Jumping Zombie Game', href: 'https://funnyone7436.github.io/zombie-jump-game/' },
+  { title: 'Pokemon Pinball Machine', href: 'https://funnyone7436.github.io/Pokemon-Pinball-Machine/', desc: 'Jump to control the center ring and hit the Pokémon pinballs!' },
+  { title: 'Jump for Joy, Bloom for Spring!', href: 'https://funnyone7436.github.io/Flowers-In-Spring/', desc: 'Jump to trigger a super bloom of colorful flowers on the car!' },
+  { title: 'Snow In Christmas(Add Sound Control)', href: 'https://funnyone7436.github.io/Up-and-down-The-Christmas-Gifts/', desc: 'Say "Up" to make the Christmas car fly, and jump to make it snow heavier!' },
+  { title: 'Snow In Christmas', href: 'https://funnyone7436.github.io/Snow-In-Christmas/', desc: 'Jump to create a heavy, magical snowfall in the winter scene.' },
+  { title: 'Dancing With Fallen Leaves', href: 'https://funnyone7436.github.io/Dancing-With-Fallen-Leaves/', desc: 'Jump to make colorful autumn leaves dance and fall from the sky!' },
+  { title: 'Rain In Halloween', href: 'https://funnyone7436.github.io/Rain-In-Halloween/', desc: 'Jump to summon heavier rain, a giant moon, and a faster flying witch!' },
+  { title: 'Rainbow Caterpillar Game', href: 'https://funnyone7436.github.io/Dancing-With-Hungry-Rainbow-Caterpillar/', desc: 'Jump to transform the green caterpillar into a vibrant rainbow!' }, 
+  { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/', desc: 'Wave your hands to launch fireworks! The faster you move, the bigger the blast!' },   
+  { title: 'Jumping Minecraft Game', href: 'https://funnyone7436.github.io/Dance-with-Minecraft-block/', desc: 'Wave and raise your hands to smash through the Minecraft block walls!' },
+  { title: 'Jumping Zombie Game', href: 'https://funnyone7436.github.io/zombie-jump-game/', desc: 'Wave both hands and jump to blast away the incoming zombies!' },
 ]
 
 const EDUCATION_GAMES = [
-  { title: 'Discover the US States', href: 'https://funnyone7436.github.io/US-Geo-State-Game/' },
+  { title: 'Discover the US States', href: 'https://funnyone7436.github.io/US-Geo-State-Game/', desc: 'Speak the name of a US State or Capital to reveal or hide it on the map.' },
 ]
 
 /* ========================= Helpers =========================== */
@@ -256,21 +256,13 @@ function ExampleBackground({
         />
       )}
       {dirEnabled && <directionalLight ref={dirRef} />}
-
-      {/* Skydome */}
       <mesh>
         <sphereGeometry args={[4000, 32, 15]} />
         <primitive object={skyMat} attach="material" />
       </mesh>
-
-      {/* Ground */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[10000, 10000]} />
-        <meshStandardMaterial
-          color={groundColor}
-          transparent
-          opacity={THREE.MathUtils.clamp(groundAlpha, 0, 1)}
-        />
+        <meshStandardMaterial color={groundColor} transparent opacity={THREE.MathUtils.clamp(groundAlpha, 0, 1)} />
       </mesh>
     </>
   )
@@ -301,13 +293,8 @@ function RimLight({ enabled, color='#ffffff', intensity=0, azimuth=220, elevatio
     <>
       <object3D ref={target} />
       <directionalLight
-        ref={ref}
-        color={color}
-        intensity={intensity}
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-        shadow-bias={-0.0002}
+        ref={ref} color={color} intensity={intensity} castShadow
+        shadow-mapSize-width={1024} shadow-mapSize-height={1024} shadow-bias={-0.0002}
       />
     </>
   )
@@ -317,23 +304,17 @@ function RimLight({ enabled, color='#ffffff', intensity=0, azimuth=220, elevatio
 function ConfigurableModelsRing({ audioRef, modelsSettings }) {
   const positions = useMemo(() => ringPositions(modelsSettings.length, RADIUS), [modelsSettings.length])
 
-  // Preload unique model files
   useEffect(() => {
     const unique = Array.from(new Set(modelsSettings.map(m => m.file)))
     unique.forEach(file => useGLTF.preload(`${BASE}objs/${file}`))
   }, [modelsSettings])
 
-  // Rebuild refs if the number of models changes
-  const groupRefs = useMemo(
-    () => modelsSettings.map(() => React.createRef()),
-    [modelsSettings.length]
-  )
+  const groupRefs = useMemo(() => modelsSettings.map(() => React.createRef()), [modelsSettings.length])
 
   const [spec, setSpec] = useState(null)
   const [frameDur, setFrameDur] = useState(0.02)
   const [bandMax, setBandMax] = useState(null)
 
-  // Load spectrum JSON
   useEffect(() => {
     let cancelled = false
     fetch(`${BASE}childrenbackgroundmusic.json`)
@@ -356,7 +337,6 @@ function ConfigurableModelsRing({ audioRef, modelsSettings }) {
     return () => { cancelled = true }
   }, [])
 
-  // Animation by audio relative to each model's yOffset
   useFrame(() => {
     if (!spec || !bandMax) return
     const audio = audioRef?.current
@@ -383,49 +363,29 @@ function ConfigurableModelsRing({ audioRef, modelsSettings }) {
     const yOffset = Number(setting.yOffset ?? 0)
     return (
       <ModelInstance
-        key={`${setting.file}-${i}`}
-        ref={groupRefs[i]}
-        file={setting.file}
-        scaleSetting={setting.scale}
-        rotYdeg={setting.rotYdeg}
-        position={[pos[0], yOffset, pos[2]]}
-        baseRotationY={-angle + Math.PI / 2} // face the ring center
+        key={`${setting.file}-${i}`} ref={groupRefs[i]} file={setting.file}
+        scaleSetting={setting.scale} rotYdeg={setting.rotYdeg}
+        position={[pos[0], yOffset, pos[2]]} baseRotationY={-angle + Math.PI / 2}
       />
     )
   })
 }
 
-// Helper component for a single model instance
 const ModelInstance = React.forwardRef(function ModelInstance(
-  { file, scaleSetting = 1, rotYdeg = 0, position = [0,0,0], baseRotationY = 0 },
-  ref
+  { file, scaleSetting = 1, rotYdeg = 0, position = [0,0,0], baseRotationY = 0 }, ref
 ) {
   const { scene } = useGLTF(`${BASE}objs/${file}`)
-
   const sceneClone = useMemo(() => {
     const clone = scene.clone(true)
-    clone.traverse((o) => {
-      if (o.isMesh) {
-        o.castShadow = true
-        o.receiveShadow = true
-      }
-    })
+    clone.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true } })
     const s = normalizeScale(scaleSetting)
     clone.scale.set(s.x, s.y, s.z)
     return clone
   }, [scene, scaleSetting])
 
   return (
-    <group
-      ref={ref}
-      position={position}
-      rotation={[0, baseRotationY, 0]}
-      scale={[1, 1, 1]}
-    >
-      <primitive
-        object={sceneClone}
-        rotation={[0, THREE.MathUtils.degToRad(rotYdeg), 0]}
-      />
+    <group ref={ref} position={position} rotation={[0, baseRotationY, 0]} scale={[1, 1, 1]}>
+      <primitive object={sceneClone} rotation={[0, THREE.MathUtils.degToRad(rotYdeg), 0]} />
     </group>
   )
 })
@@ -436,10 +396,7 @@ function SparkleLink({ href, children, label = 'Open link', size = 'md' }) {
   const sizeClass = size === 'sm' ? 'sparkle-link--sm' : 'sparkle-link--md'
   return (
     <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={label}
+      href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
       className={`sparkle-link ${sizeClass}`}
       style={{ position: 'relative', zIndex: 1, textDecoration: 'none', cursor: 'pointer', userSelect: 'none' }}
     >
@@ -459,93 +416,116 @@ function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' 
   const [open, setOpen] = useState(false)
   const isTopLeft = position === 'top-left'
 
+  // 🛠️ NEW: State to track which game is currently hovered for the pop-out description
+  const [hoverInfo, setHoverInfo] = useState(null)
+
+  const handleMouseEnterItem = (e, game) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    // Mathematically perfectly align the popup box based on the screen boundaries!
+    setHoverInfo({
+      desc: game.desc,
+      top: rect.top,
+      left: rect.right + 15,
+      right: window.innerWidth - rect.left + 15
+    })
+  }
+
+  const handleMouseLeaveItem = () => {
+    setHoverInfo(null)
+  }
+
   return (
-    <div
-      style={{
-        position: 'fixed',
-        zIndex: 40,
-        pointerEvents: 'auto',
-        display: 'flex',
-        alignItems: 'center',
-        top: isTopLeft ? 16 : 'auto',
-        bottom: isTopLeft ? 'auto' : 80, // Moved up to 80px to clear the Open Source badge
-        left: isTopLeft ? 0 : 'auto',
-        right: isTopLeft ? 'auto' : 0,   // Flush to the right edge
-        flexDirection: isTopLeft ? 'row' : 'row-reverse',
-      }}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
-    >
-      {/* Drawer panel */}
+    <>
       <div
         style={{
-          position: 'absolute',
-          top: 0,
-          left: isTopLeft ? (open ? 0 : -600) : 'auto',
-          right: isTopLeft ? 'auto' : (open ? 0 : -600),
-          width: 'max-content',
-          maxWidth: '85vw',
-          maxHeight: '86vh',
-          borderRadius: 24,
-          background: 'rgba(255,255,255,0.45)',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
-          border: '3px solid rgba(255,255,255,0.9)',
-          boxShadow: '0px 8px 26px rgba(0,0,0,0.20)',
-          transition: isTopLeft ? 'left 0.3s ease-out' : 'right 0.3s ease-out',
-          zIndex: 50,
-          overflow: 'hidden'
+          position: 'fixed', zIndex: 40, pointerEvents: 'auto', display: 'flex', alignItems: 'center',
+          top: isTopLeft ? 16 : 'auto', bottom: isTopLeft ? 'auto' : 80, 
+          left: isTopLeft ? 0 : 'auto', right: isTopLeft ? 'auto' : 0,   
+          flexDirection: isTopLeft ? 'row' : 'row-reverse',
         }}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => { setOpen(false); setHoverInfo(null); }}
       >
-        {/* Inner scrolling content */}
+        {/* Drawer panel */}
         <div
           style={{
-            padding: '16px 24px',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            maxHeight: '86vh',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '6px',
-            scrollbarWidth: 'thin',
+            position: 'absolute', top: 0,
+            left: isTopLeft ? (open ? 0 : -600) : 'auto',
+            right: isTopLeft ? 'auto' : (open ? 0 : -600),
+            width: 'max-content', maxWidth: '85vw', maxHeight: '86vh', borderRadius: 24,
+            background: 'rgba(255,255,255,0.45)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+            border: '3px solid rgba(255,255,255,0.9)', boxShadow: '0px 8px 26px rgba(0,0,0,0.20)',
+            transition: isTopLeft ? 'left 0.3s ease-out' : 'right 0.3s ease-out',
+            zIndex: 50, overflow: 'hidden'
           }}
         >
-          {games.map((g) => (
-            <div key={g.href} style={{ width: 'fit-content' }}>
-              <SparkleLink href={g.href} size="sm">
-                🎈 {g.title}
-              </SparkleLink>
-            </div>
-          ))}
+          {/* Inner scrolling content */}
+          <div
+            style={{
+              padding: '16px 24px', overflowY: 'auto', overflowX: 'hidden', maxHeight: '86vh',
+              display: 'flex', flexDirection: 'column', gap: '6px', scrollbarWidth: 'thin',
+            }}
+          >
+            {games.map((g) => (
+              <div 
+                key={g.href} 
+                style={{ width: 'fit-content' }}
+                onMouseEnter={(e) => handleMouseEnterItem(e, g)}
+                onMouseLeave={handleMouseLeaveItem}
+              >
+                <SparkleLink href={g.href} size="sm">
+                  🎈 {g.title}
+                </SparkleLink>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Tab */}
+        <div
+          style={{
+            width: 175, height: 48, background: tabColor, color: '#fff', display: 'flex',
+            justifyContent: 'center', alignItems: 'center', cursor: 'pointer',
+            borderTopRightRadius: isTopLeft ? 20 : 0, borderBottomRightRadius: isTopLeft ? 20 : 0,
+            borderTopLeftRadius: isTopLeft ? 0 : 20, borderBottomLeftRadius: isTopLeft ? 0 : 20,
+            boxShadow: '0 6px 18px rgba(0,0,0,0.25)', userSelect: 'none', fontWeight: 700,
+            fontSize: 18, fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
+            border: '3px solid rgba(255,255,255,0.8)',
+          }}
+        >
+          {label}
         </div>
       </div>
 
-      {/* Tab */}
+      {/* 🛠️ NEW: The Floating Description Popup! */}
+      {/* It lives completely outside the drawer so it is never clipped or hidden */}
       <div
         style={{
-          width: 175, // Increased width to fit "Education Games" neatly
-          height: 48,
-          background: tabColor,
-          color: '#fff',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderTopRightRadius: isTopLeft ? 20 : 0,
-          borderBottomRightRadius: isTopLeft ? 20 : 0,
-          borderTopLeftRadius: isTopLeft ? 0 : 20,
-          borderBottomLeftRadius: isTopLeft ? 0 : 20,
-          cursor: 'pointer',
-          boxShadow: '0 6px 18px rgba(0,0,0,0.25)',
-          userSelect: 'none',
-          fontWeight: 700,
-          fontSize: 18,
-          fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
-          border: '3px solid rgba(255,255,255,0.8)',
+          position: 'fixed',
+          top: hoverInfo ? hoverInfo.top : 0,
+          left: isTopLeft && hoverInfo ? hoverInfo.left : 'auto',
+          right: !isTopLeft && hoverInfo ? hoverInfo.right : 'auto',
+          width: 250,
+          background: 'linear-gradient(135deg, rgba(0, 5, 20, 0.9), rgba(0, 20, 40, 0.8))',
+          color: '#00ffcc',
+          padding: '14px 18px',
+          borderRadius: '12px',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+          fontSize: '15px',
+          fontWeight: '600',
+          lineHeight: '1.4',
+          boxShadow: '0 12px 30px rgba(0,0,0,0.4), 0 0 15px rgba(0, 255, 204, 0.2)',
+          border: '2px solid rgba(0, 255, 204, 0.5)',
+          backdropFilter: 'blur(8px)',
+          opacity: open && hoverInfo ? 1 : 0,
+          pointerEvents: 'none',
+          transition: 'opacity 0.2s ease, top 0.1s ease',
+          zIndex: 100, // Very high Z-index so it sits on top of everything!
         }}
       >
-        {label}
+        {hoverInfo ? hoverInfo.desc : ''}
       </div>
-    </div>
+    </>
   )
 }
 
@@ -553,11 +533,8 @@ function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' 
 function GitHubBadge() {
   return (
     <a
-      className="gh-badge"
-      href="https://github.com/funnyone7436/HealthyGameMainpage"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Open Source on GitHub: HealthyGameMainpage"
+      className="gh-badge" href="https://github.com/funnyone7436/HealthyGameMainpage"
+      target="_blank" rel="noopener noreferrer" aria-label="Open Source on GitHub: HealthyGameMainpage"
     >
       <span className="gh-chip">
         <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -573,35 +550,18 @@ function GitHubBadge() {
 export default function App() {
   const audioRef = useRef(null)
 
-  // Fallback defaults (preset locked to 'lobby')
   const defaults = useMemo(() => ({
-    skyTop: '#87CEE8', skyTopAlpha: 1,
-    skyBottom: '#FFFFFF', skyBottomAlpha: 1,
-    groundColor: '#FFF8DC', groundAlpha: 1,
-    sunColor: '#FFD580',
-    fogType: 'linear',
-    fogNear: 1,
-    fogFar: 4000,
-    fogDensity: 0.0025,
-    gradientExponent: 0.9,
-    envPreset: 'lobby',
-    envIntensity: 0.8,
-    ambientColor: '#FFF6DA',
-    ambientIntensity: 0.25,
-    hemiEnabled: true,
-    hemiIntensity: 0.6,
-    dirEnabled: true,
-    dirIntensity: 1.3,
-    sunAzimuth: 45,
-    sunElevation: 55,
-    rimEnabled: false,
-    rimColor: '#ffffff',
-    rimIntensity: 0.0,
+    skyTop: '#87CEE8', skyTopAlpha: 1, skyBottom: '#FFFFFF', skyBottomAlpha: 1,
+    groundColor: '#FFF8DC', groundAlpha: 1, sunColor: '#FFD580',
+    fogType: 'linear', fogNear: 1, fogFar: 4000, fogDensity: 0.0025,
+    gradientExponent: 0.9, envPreset: 'lobby', envIntensity: 0.8,
+    ambientColor: '#FFF6DA', ambientIntensity: 0.25, hemiEnabled: true, hemiIntensity: 0.6,
+    dirEnabled: true, dirIntensity: 1.3, sunAzimuth: 45, sunElevation: 55,
+    rimEnabled: false, rimColor: '#ffffff', rimIntensity: 0.0,
   }), [])
 
   const [env, setEnv] = useState(() => ({ ...defaults }))
 
-  // Optionally read lights-settings.txt but force preset to 'lobby'
   useEffect(() => {
     let cancelled = false
     fetch(`${BASE}lights-settings.txt`)
@@ -612,15 +572,12 @@ export default function App() {
           const parsed = JSON.parse(t)
           const validated = validateEnv(parsed, defaults)
           setEnv({ ...validated, envPreset: 'lobby' })
-        } catch {
-          setEnv({ ...defaults })
-        }
+        } catch { setEnv({ ...defaults }) }
       })
       .catch(() => setEnv({ ...defaults }))
     return () => { cancelled = true }
   }, [defaults])
 
-  // Audio boot
   useEffect(() => {
     const a = audioRef.current
     if (!a) return
@@ -656,7 +613,6 @@ export default function App() {
     []
   )
 
-  /* ===== Base models list with per-axis scale + yOffset ===== */
   const baseModelsSettings = useMemo(() => ([
     { file: 'rocket.glb',           scale: { x: 2.0, y: 2.0, z: 2.0 }, rotYdeg: 0, yOffset: -1.0 },
     { file: 'flowerblue.glb',        scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: 0.0 },
@@ -680,7 +636,6 @@ export default function App() {
     { file: 'icecreampurple.glb',    scale: { x: 1.0, y: 1.0, z: 1.0 }, rotYdeg: 0, yOffset: -1.6 },
   ]), [])
 
-  // Duplicate until COUNT is reached (keeps order)
   const modelsSettings = useMemo(() => {
     const result = []
     while (result.length < COUNT) result.push(...baseModelsSettings)
@@ -689,184 +644,44 @@ export default function App() {
 
   return (
     <>
-      {/* Styles: sparkle chips + GitHub badge */}
       <style>{`
-        /* ===== Jumping Words Animation ===== */
-        @keyframes bouncy-word {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-5px); } 
-        }
-        .jump-word {
-          display: inline-block; 
-          font-size: 1.25em; 
-          animation: bouncy-word 1.5s ease-in-out infinite;
-          white-space: nowrap; 
-        }
-        .sparkle-link__chip{
-          position: relative;
-          display: inline-flex;
-          align-items: center;
-          gap: .5rem;
-          padding: 10px 14px;
-          border-radius: 12px;
-          font: 700 16px/1.1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-          color: #fff;
-          background: linear-gradient(135deg, rgba(0,0,0,.65), rgba(0,0,0,.35));
-          box-shadow: 0 6px 18px rgba(0,0,0,.25);
-          transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
-          backdrop-filter: blur(4px);
-          white-space: nowrap;
-        }
+        @keyframes bouncy-word { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .jump-word { display: inline-block; font-size: 1.25em; animation: bouncy-word 1.5s ease-in-out infinite; white-space: nowrap; }
+        .sparkle-link__chip { position: relative; display: inline-flex; align-items: center; gap: .5rem; padding: 10px 14px; border-radius: 12px; font: 700 16px/1.1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: #fff; background: linear-gradient(135deg, rgba(0,0,0,.65), rgba(0,0,0,.35)); box-shadow: 0 6px 18px rgba(0,0,0,.25); transition: transform .15s ease, box-shadow .2s ease, background .2s ease; backdrop-filter: blur(4px); white-space: nowrap; }
         .sparkle-link--sm .sparkle-link__chip{ padding: 8px 12px; font-size: 14px; }
-        .sparkle-link:hover .sparkle-link__chip{
-          transform: translateY(-1px);
-          box-shadow: 0 10px 26px rgba(0,0,0,.28);
-          background: linear-gradient(135deg, rgba(0,0,0,.75), rgba(0,0,0,.42));
-        }
-        .sparkle-link__shine{ position: absolute; inset: 0; border-radius: 12px; overflow: hidden; pointer-events: none; }
-        .sparkle-link__shine::before{
-          content:''; position: absolute; top: -50%; left: -30%; width: 40%; height: 200%;
-          background: linear-gradient(115deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.25) 50%, rgba(255,255,255,0) 100%);
-          transform: translateX(-120%) rotate(20deg);
-          transition: transform .6s ease;
-        }
+        .sparkle-link:hover .sparkle-link__chip{ transform: translateY(-1px); box-shadow: 0 10px 26px rgba(0,0,0,.28); background: linear-gradient(135deg, rgba(0,0,0,.75), rgba(0,0,0,.42)); }
+        .sparkle-link__shine { position: absolute; inset: 0; border-radius: 12px; overflow: hidden; pointer-events: none; }
+        .sparkle-link__shine::before { content:''; position: absolute; top: -50%; left: -30%; width: 40%; height: 200%; background: linear-gradient(115deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.25) 50%, rgba(255,255,255,0) 100%); transform: translateX(-120%) rotate(20deg); transition: transform .6s ease; }
         .sparkle-link:hover .sparkle-link__shine::before{ transform: translateX(260%) rotate(20deg); }
-        .sparkle-link__sparkles{
-          position: absolute; inset: -10px -14px; pointer-events: none; opacity: 0; transition: opacity .15s ease;
-          filter: drop-shadow(0 0 6px rgba(255,255,255,.6));
-        }
+        .sparkle-link__sparkles{ position: absolute; inset: -10px -14px; pointer-events: none; opacity: 0; transition: opacity .15s ease; filter: drop-shadow(0 0 6px rgba(255,255,255,.6)); }
         .sparkle-link:hover .sparkle-link__sparkles{ opacity: 1; }
-        .sparkle{
-          position: absolute; width: 6px; height: 6px;
-          background: radial-gradient(circle at 50% 50%, #fff 0%, #ffe17a 55%, rgba(255,255,255,0) 70%);
-          border-radius: 50%; transform: translate3d(0,0,0) scale(0);
-          animation: sparkle-pop .9s ease forwards; animation-delay: calc(var(--d, 0) * 1ms);
-          opacity: .95; mix-blend-mode: screen;
-        }
-        @keyframes sparkle-pop{
-          0% { transform: translate(var(--x,0), var(--y,0)) scale(0); opacity: 0; }
-          40%{ transform: translate(var(--x,0), var(--y,0)) scale(1); opacity: 1; }
-          100%{ transform: translate(calc(var(--x,0)*1.35), calc(var(--y,0)*1.35)) scale(0); opacity: 0; }
-        }
-        .sparkle:nth-child(1){--x:-6px; --y:-18px; --d:  0;}
-        .sparkle:nth-child(2){--x:10px; --y:-14px; --d: 60;}
-        .sparkle:nth-child(3){--x:-16px;--y: 8px;  --d:120;}
-        .sparkle:nth-child(4){--x:14px; --y:10px;  --d:180;}
-        .sparkle:nth-child(5){--x:32px; --y:-6px;  --d:240;}
-        .sparkle:nth-child(6){--x:-30px;--y:-4px;  --d:300;}
-        .sparkle:nth-child(7){--x:0px;  --y:18px;  --d:360;}
-        .sparkle:nth-child(8){--x:-22px;--y:16px;  --d:420;}
-        .sparkle:nth-child(9){--x:24px; --y:16px;  --d:480;}
-        .sparkle:nth-child(10){--x:36px;--y:-14px; --d:540;}
-        .sparkle:nth-child(11){--x:-38px;--y:-12px; --d:600;}
-        .sparkle:nth-child(12){--x:8px; --y:-22px; --d:660;}
-
-        /* ===== Title tooltip (single column, compact) ===== */
+        .sparkle{ position: absolute; width: 6px; height: 6px; background: radial-gradient(circle at 50% 50%, #fff 0%, #ffe17a 55%, rgba(255,255,255,0) 70%); border-radius: 50%; transform: translate3d(0,0,0) scale(0); animation: sparkle-pop .9s ease forwards; animation-delay: calc(var(--d, 0) * 1ms); opacity: .95; mix-blend-mode: screen; }
+        @keyframes sparkle-pop{ 0% { transform: translate(var(--x,0), var(--y,0)) scale(0); opacity: 0; } 40%{ transform: translate(var(--x,0), var(--y,0)) scale(1); opacity: 1; } 100%{ transform: translate(calc(var(--x,0)*1.35), calc(var(--y,0)*1.35)) scale(0); opacity: 0; } }
+        .sparkle:nth-child(1){--x:-6px; --y:-18px; --d:  0;} .sparkle:nth-child(2){--x:10px; --y:-14px; --d: 60;} .sparkle:nth-child(3){--x:-16px;--y: 8px;  --d:120;} .sparkle:nth-child(4){--x:14px; --y:10px;  --d:180;} .sparkle:nth-child(5){--x:32px; --y:-6px;  --d:240;} .sparkle:nth-child(6){--x:-30px;--y:-4px;  --d:300;} .sparkle:nth-child(7){--x:0px;  --y:18px;  --d:360;} .sparkle:nth-child(8){--x:-22px;--y:16px;  --d:420;} .sparkle:nth-child(9){--x:24px; --y:16px;  --d:480;} .sparkle:nth-child(10){--x:36px;--y:-14px; --d:540;} .sparkle:nth-child(11){--x:-38px;--y:-12px; --d:600;} .sparkle:nth-child(12){--x:8px; --y:-22px; --d:660;}
         .site-title{ position:fixed; inset:auto; }
-        .site-title__bubble{
-          position: absolute;
-          left: 50%;
-          top: calc(100% + 10px);
-          transform: translateX(-50%) translateY(4px) scale(.98);
-          width: clamp(320px, 58vw, 720px);
-          max-width: 92vw;
-          font-size: clamp(12px, 0.9vw + 9px, 14px);
-          line-height: 1.28;
-          padding: 12px 14px;
-          border-radius: 12px;
-          color: #fff;
-          background: linear-gradient(180deg, #1e1f22, #111215);
-          box-shadow: 0 10px 28px rgba(0,0,0,.22), 0 2px 6px rgba(0,0,0,.12);
-          opacity: 0;
-          pointer-events: none;
-          transition: opacity .15s ease, transform .18s ease;
-          z-index: 31;
-          white-space: normal;
-          text-align: left;
-          column-count: 1 !important;
-          column-gap: 0 !important;
-          hyphens: none;
-          -webkit-hyphens: none;
-          word-break: normal;
-          max-height: none;
-          overflow: visible;
-        }
-        .site-title__bubble::before{
-          content:'';
-          position: absolute;
-          top: -8px; left: 50%;
-          transform: translateX(-50%);
-          border: 8px solid transparent;
-          border-bottom-color: #1e1f22;
-          filter: drop-shadow(0 2px 3px rgba(0,0,0,.12));
-        }
-        .site-title:hover .site-title__bubble,
-        .site-title:focus-within .site-title__bubble{
-          opacity: 1;
-          transform: translateX(-50%) translateY(0) scale(1);
-        }
-        @media (prefers-reduced-motion: reduce){
-          .site-title__bubble{ transition: opacity .001s linear; }
-        }
-
-        /* ===== Bottom-right GitHub badge ===== */
-        .gh-badge{
-          position: fixed;
-          right: 16px;
-          bottom: 16px;
-          z-index: 40;
-          text-decoration: none;
-          pointer-events: auto;
-        }
-        .gh-chip{
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 8px 12px;
-          border-radius: 12px;
-          font: 700 13px/1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-          color: #fff;
-          background: linear-gradient(135deg, rgba(0,0,0,.65), rgba(0,0,0,.35));
-          box-shadow: 0 6px 18px rgba(0,0,0,.25);
-          transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
-          backdrop-filter: blur(4px);
-        }
-        .gh-badge:hover .gh-chip{
-          transform: translateY(-1px);
-          box-shadow: 0 10px 26px rgba(0,0,0,.28);
-          background: linear-gradient(135deg, rgba(0,0,0,.75), rgba(0,0,0,.42));
-        }
+        .site-title__bubble{ position: absolute; left: 50%; top: calc(100% + 10px); transform: translateX(-50%) translateY(4px) scale(.98); width: clamp(320px, 58vw, 720px); max-width: 92vw; font-size: clamp(12px, 0.9vw + 9px, 14px); line-height: 1.28; padding: 12px 14px; border-radius: 12px; color: #fff; background: linear-gradient(180deg, #1e1f22, #111215); box-shadow: 0 10px 28px rgba(0,0,0,.22), 0 2px 6px rgba(0,0,0,.12); opacity: 0; pointer-events: none; transition: opacity .15s ease, transform .18s ease; z-index: 31; white-space: normal; text-align: left; column-count: 1 !important; column-gap: 0 !important; hyphens: none; -webkit-hyphens: none; word-break: normal; max-height: none; overflow: visible; }
+        .site-title__bubble::before{ content:''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); border: 8px solid transparent; border-bottom-color: #1e1f22; filter: drop-shadow(0 2px 3px rgba(0,0,0,.12)); }
+        .site-title:hover .site-title__bubble, .site-title:focus-within .site-title__bubble{ opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+        @media (prefers-reduced-motion: reduce){ .site-title__bubble{ transition: opacity .001s linear; } }
+        .gh-badge{ position: fixed; right: 16px; bottom: 16px; z-index: 40; text-decoration: none; pointer-events: auto; }
+        .gh-chip{ display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 12px; font: 700 13px/1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: #fff; background: linear-gradient(135deg, rgba(0,0,0,.65), rgba(0,0,0,.35)); box-shadow: 0 6px 18px rgba(0,0,0,.25); transition: transform .15s ease, box-shadow .2s ease, background .2s ease; backdrop-filter: blur(4px); }
+        .gh-badge:hover .gh-chip{ transform: translateY(-1px); box-shadow: 0 10px 26px rgba(0,0,0,.28); background: linear-gradient(135deg, rgba(0,0,0,.75), rgba(0,0,0,.42)); }
       `}</style>
 
-      {/* --- Top-center title with single-block tooltip --- */}
       <div
-        className="site-title"
-        tabIndex={0}
+        className="site-title" tabIndex={0}
         style={{
-          position: 'fixed',
-          top: 12,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 30,
-          padding: '8px 14px',
-          borderRadius: 12,
-          background: 'linear-gradient(135deg, rgba(0,0,0,.55), rgba(0,0,0,.25))',
-          color: '#fff',
-          fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
-          fontWeight: 700,
-          letterSpacing: 0.6,
-          fontSize: 18,
-          textShadow: '0 2px 8px rgba(0,0,0,.6)',
-          boxShadow: '0 6px 18px rgba(0,0,0,.25)',
-          pointerEvents: 'auto',
-          userSelect: 'none',
+          position: 'fixed', top: 12, left: '50%', transform: 'translateX(-50%)', zIndex: 30, padding: '8px 14px',
+          borderRadius: 12, background: 'linear-gradient(135deg, rgba(0,0,0,.55), rgba(0,0,0,.25))',
+          color: '#fff', fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
+          fontWeight: 700, letterSpacing: 0.6, fontSize: 18, textShadow: '0 2px 8px rgba(0,0,0,.6)',
+          boxShadow: '0 6px 18px rgba(0,0,0,.25)', pointerEvents: 'auto', userSelect: 'none',
         }}
         aria-describedby="siteTitleTooltip"
       >
         Healthy Games for Kids
 		<span id="siteTitleTooltip" className="site-title__bubble" role="tooltip">
-          Designed with kids’ well-being in mind: 
-		  it promotes{' '}
+          Designed with kids’ well-being in mind: it promotes{' '}
           <span className="jump-word" style={{ color: '#00FF7F', fontWeight: 'bold', animationDelay: '0.0s' }}>physical movement</span>,{' '}
           <span className="jump-word" style={{ color: '#FF5E7E', fontWeight: 'bold', animationDelay: '0.2s' }}>interactive learning</span>,{' '}
           <span className="jump-word" style={{ color: '#FFD700', fontWeight: 'bold', animationDelay: '0.4s' }}>balanced short play</span>, and{' '}
@@ -878,118 +693,57 @@ export default function App() {
         </span>
       </div>
 
-      {/* --- Categorized Games Drawers --- */}
       <GameDrawer games={MOTION_GAMES} label="Motion Games" position="top-left" />
-      
-      {/* Add your new tabColor here! */}
-      <GameDrawer 
-        games={EDUCATION_GAMES} 
-        label="Education Games" 
-        position="bottom-right" 
-        tabColor="#4a90e2" 
-      />
+      <GameDrawer games={EDUCATION_GAMES} label="Education Games" position="bottom-right" tabColor="#4a90e2" />
 
-      {/* audio UI */}
       <audio
-        ref={audioRef}
-        src={`${BASE}childrenbackgroundmusic.mp3`}
-        controls loop autoPlay playsInline
+        ref={audioRef} src={`${BASE}childrenbackgroundmusic.mp3`} controls loop autoPlay playsInline
         style={{ position:'fixed', bottom:16, left:16, background:'rgba(255,255,255,0.9)', borderRadius:8, padding:4, zIndex:10 }}
       />
 
-      {/* bottom-right GitHub badge */}
       <GitHubBadge />
 
       <Canvas
         style={{ position:'fixed', inset:0, touchAction: 'none' }}
-        camera={{ position:[0, CONTENT_Y + 0.8, 10], fov:60, near:0.1, far:5000 }}
-        shadows
-        gl={{ alpha: true }}
+        camera={{ position:[0, CONTENT_Y + 0.8, 10], fov:60, near:0.1, far:5000 }} shadows gl={{ alpha: true }}
       >
-        {/* Environment (locked to 'lobby') */}
         <Environment preset="lobby" background={false} intensity={parseFloat(env.envIntensity)} />
 
         <ExampleBackground
-          skyTop={env.skyTop}
-          skyTopAlpha={parseFloat(env.skyTopAlpha)}
-          skyBottom={env.skyBottom}
-          skyBottomAlpha={parseFloat(env.skyBottomAlpha)}
-          groundColor={env.groundColor}
-          groundAlpha={parseFloat(env.groundAlpha)}
-          sunColor={env.sunColor}
-          hemiEnabled={env.hemiEnabled}
-          dirEnabled={env.dirEnabled}
-          dirIntensity={parseFloat(env.dirIntensity)}
-          hemiIntensity={parseFloat(env.hemiIntensity)}
-          sunAzimuth={parseFloat(env.sunAzimuth)}
-          sunElevation={parseFloat(env.sunElevation)}
-          fogType={env.fogType}
-          fogNear={parseFloat(env.fogNear)}
-          fogFar={parseFloat(env.fogFar)}
-          fogDensity={parseFloat(env.fogDensity)}
+          skyTop={env.skyTop} skyTopAlpha={parseFloat(env.skyTopAlpha)} skyBottom={env.skyBottom} skyBottomAlpha={parseFloat(env.skyBottomAlpha)}
+          groundColor={env.groundColor} groundAlpha={parseFloat(env.groundAlpha)} sunColor={env.sunColor}
+          hemiEnabled={env.hemiEnabled} dirEnabled={env.dirEnabled} dirIntensity={parseFloat(env.dirIntensity)}
+          hemiIntensity={parseFloat(env.hemiIntensity)} sunAzimuth={parseFloat(env.sunAzimuth)} sunElevation={parseFloat(env.sunElevation)}
+          fogType={env.fogType} fogNear={parseFloat(env.fogNear)} fogFar={parseFloat(env.fogFar)} fogDensity={parseFloat(env.fogDensity)}
           gradientExponent={parseFloat(env.gradientExponent)}
         />
 
         <ambientLight color={env.ambientColor} intensity={parseFloat(env.ambientIntensity)} />
 
-        <RimLight
-          enabled={env.rimEnabled}
-          color={env.rimColor}
-          intensity={parseFloat(env.rimIntensity)}
-          azimuth={220}
-          elevation={25}
-        />
+        <RimLight enabled={env.rimEnabled} color={env.rimColor} intensity={parseFloat(env.rimIntensity)} azimuth={220} elevation={25} />
 
         <OrbitControls
-          makeDefault
-          target={[0, CONTENT_Y, 0]}
-          enablePan={false}
-          enableZoom={false}
-          enableRotate
-          enableDamping
-          dampingFactor={0.12}
-          rotateSpeed={1.5}
-          autoRotate
-          autoRotateSpeed={0.6}
-          minDistance={10}
-          maxDistance={10}
-          minPolarAngle={0.1}
-          maxPolarAngle={Math.PI - 0.1}
-          mouseButtons={{ LEFT: THREE.MOUSE.ROTATE }}
-          touches={{ ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.ROTATE }}
+          makeDefault target={[0, CONTENT_Y, 0]} enablePan={false} enableZoom={false} enableRotate
+          enableDamping dampingFactor={0.12} rotateSpeed={1.5} autoRotate autoRotateSpeed={0.6}
+          minDistance={10} maxDistance={10} minPolarAngle={0.1} maxPolarAngle={Math.PI - 0.1}
+          mouseButtons={{ LEFT: THREE.MOUSE.ROTATE }} touches={{ ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.ROTATE }}
         />
 
         <group position={[0, CONTENT_Y, 0]}>
-          {/* Configurable models ring */}
           <Suspense fallback={null}>
             <ConfigurableModelsRing audioRef={audioRef} modelsSettings={modelsSettings} />
           </Suspense>
-
-          {/* Waves (toggle with SHOW_WAVES) */}
           {SHOW_WAVES && (
             Array.from({ length: 10 }).map((_, i) => (
               <SineCircle
-                key={i}
-                radius={24}
-                segments={300}
-                speed={0.6}
-                amplitude={2}
-                phase={(i / 30) * Math.PI * 2}
-                color={wavePalette[i % wavePalette.length]}
-                thickness={0.1}
+                key={i} radius={24} segments={300} speed={0.6} amplitude={2}
+                phase={(i / 30) * Math.PI * 2} color={wavePalette[i % wavePalette.length]} thickness={0.1}
               />
             ))
           )}
         </group>
 
-        <ContactShadows
-          position={[0, 0, 0]}
-          opacity={0.4}
-          width={120}
-          height={120}
-          blur={1.6}
-          far={40}
-        />
+        <ContactShadows position={[0, 0, 0]} opacity={0.4} width={120} height={120} blur={1.6} far={40} />
       </Canvas>
     </>
   )
