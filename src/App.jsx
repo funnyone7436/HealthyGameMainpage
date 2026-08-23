@@ -19,6 +19,8 @@ const SHOW_WAVES = false
 
 /* ======= Editable lists of game titles, URLs, and Descriptions ======= */
 const MOTION_GAMES = [
+  // 🚨 NEW: Added Halloween 2026 to the very top with an improved description!
+  { title: 'Halloween Game 2026', href: 'https://funnyone7436.github.io/Halloween-Game-2026/', desc: 'Jump high and wave your arms to grow your skeleton into a giant bobblehead and smash the spooky falling items!' },
   { title: 'Pokemon Pinball Machine', href: 'https://funnyone7436.github.io/Pokemon-Pinball-Machine/', desc: 'Jump to control the center ring and hit the Pokémon pinballs!' },
   { title: 'Jump for Joy, Bloom for Spring!', href: 'https://funnyone7436.github.io/Flowers-In-Spring/', desc: 'Jump to trigger a super bloom of colorful flowers on the car!' },
   { title: 'Snow In Christmas(Add Sound Control)', href: 'https://funnyone7436.github.io/Up-and-down-The-Christmas-Gifts/', desc: 'Say "Up" to make the Christmas car fly, and jump to make it snow heavier!' },
@@ -29,6 +31,11 @@ const MOTION_GAMES = [
   { title: 'Jumping Fireworks Game', href: 'https://funnyone7436.github.io/fireworks-gesture-game/', desc: 'Wave your hands to launch fireworks! The faster you move, the bigger the blast!' },   
   { title: 'Jumping Minecraft Game', href: 'https://funnyone7436.github.io/Dance-with-Minecraft-block/', desc: 'Wave and raise your hands to smash through the Minecraft block walls!' },
   { title: 'Jumping Zombie Game', href: 'https://funnyone7436.github.io/zombie-jump-game/', desc: 'Wave both hands and jump to blast away the incoming zombies!' },
+]
+
+// 🚨 NEW: The new Circle Art tab category!
+const CIRCLE_ART_GAMES = [
+  { title: 'Explore Four Seasons Town', href: 'https://funnyone7436.github.io/ExploreFourSeasonsTown/', desc: 'Drag, click, and interact to explore the magical 3D world of Four Seasons Town!' },
 ]
 
 const EDUCATION_GAMES = [
@@ -412,16 +419,17 @@ function SparkleLink({ href, children, label = 'Open link', size = 'md' }) {
 }
 
 /* ================= Configurable Game Drawer ================= */
+// 🚨 UPGRADED: GameDrawer now seamlessly handles top, bottom, left, and right positions!
 function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' }) {
   const [open, setOpen] = useState(false)
-  const isTopLeft = position === 'top-left'
+  
+  const isLeft = position.includes('left')
+  const isTop = position.includes('top')
 
-  // 🛠️ NEW: State to track which game is currently hovered for the pop-out description
   const [hoverInfo, setHoverInfo] = useState(null)
 
   const handleMouseEnterItem = (e, game) => {
     const rect = e.currentTarget.getBoundingClientRect()
-    // Mathematically perfectly align the popup box based on the screen boundaries!
     setHoverInfo({
       desc: game.desc,
       top: rect.top,
@@ -439,9 +447,9 @@ function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' 
       <div
         style={{
           position: 'fixed', zIndex: 40, pointerEvents: 'auto', display: 'flex', alignItems: 'center',
-          top: isTopLeft ? 16 : 'auto', bottom: isTopLeft ? 'auto' : 80, 
-          left: isTopLeft ? 0 : 'auto', right: isTopLeft ? 'auto' : 0,   
-          flexDirection: isTopLeft ? 'row' : 'row-reverse',
+          top: isTop ? 16 : 'auto', bottom: isTop ? 'auto' : 80, 
+          left: isLeft ? 0 : 'auto', right: isLeft ? 'auto' : 0,   
+          flexDirection: isLeft ? 'row' : 'row-reverse',
         }}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => { setOpen(false); setHoverInfo(null); }}
@@ -450,12 +458,12 @@ function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' 
         <div
           style={{
             position: 'absolute', top: 0,
-            left: isTopLeft ? (open ? 0 : -600) : 'auto',
-            right: isTopLeft ? 'auto' : (open ? 0 : -600),
+            left: isLeft ? (open ? 0 : -600) : 'auto',
+            right: isLeft ? 'auto' : (open ? 0 : -600),
             width: 'max-content', maxWidth: '85vw', maxHeight: '86vh', borderRadius: 24,
             background: 'rgba(255,255,255,0.45)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
             border: '3px solid rgba(255,255,255,0.9)', boxShadow: '0px 8px 26px rgba(0,0,0,0.20)',
-            transition: isTopLeft ? 'left 0.3s ease-out' : 'right 0.3s ease-out',
+            transition: isLeft ? 'left 0.3s ease-out' : 'right 0.3s ease-out',
             zIndex: 50, overflow: 'hidden'
           }}
         >
@@ -486,8 +494,8 @@ function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' 
           style={{
             width: 175, height: 48, background: tabColor, color: '#fff', display: 'flex',
             justifyContent: 'center', alignItems: 'center', cursor: 'pointer',
-            borderTopRightRadius: isTopLeft ? 20 : 0, borderBottomRightRadius: isTopLeft ? 20 : 0,
-            borderTopLeftRadius: isTopLeft ? 0 : 20, borderBottomLeftRadius: isTopLeft ? 0 : 20,
+            borderTopRightRadius: isLeft ? 20 : 0, borderBottomRightRadius: isLeft ? 20 : 0,
+            borderTopLeftRadius: isLeft ? 0 : 20, borderBottomLeftRadius: isLeft ? 0 : 20,
             boxShadow: '0 6px 18px rgba(0,0,0,0.25)', userSelect: 'none', fontWeight: 700,
             fontSize: 18, fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
             border: '3px solid rgba(255,255,255,0.8)',
@@ -497,14 +505,13 @@ function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' 
         </div>
       </div>
 
-      {/* 🛠️ NEW: The Floating Description Popup! */}
-      {/* It lives completely outside the drawer so it is never clipped or hidden */}
+      {/* The Floating Description Popup */}
       <div
         style={{
           position: 'fixed',
           top: hoverInfo ? hoverInfo.top : 0,
-          left: isTopLeft && hoverInfo ? hoverInfo.left : 'auto',
-          right: !isTopLeft && hoverInfo ? hoverInfo.right : 'auto',
+          left: isLeft && hoverInfo ? hoverInfo.left : 'auto',
+          right: !isLeft && hoverInfo ? hoverInfo.right : 'auto',
           width: 250,
           background: 'linear-gradient(135deg, rgba(0, 5, 20, 0.9), rgba(0, 20, 40, 0.8))',
           color: '#00ffcc',
@@ -520,7 +527,7 @@ function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' 
           opacity: open && hoverInfo ? 1 : 0,
           pointerEvents: 'none',
           transition: 'opacity 0.2s ease, top 0.1s ease',
-          zIndex: 100, // Very high Z-index so it sits on top of everything!
+          zIndex: 100, 
         }}
       >
         {hoverInfo ? hoverInfo.desc : ''}
@@ -693,7 +700,9 @@ export default function App() {
         </span>
       </div>
 
+      {/* 🚨 NEW: All 3 Drawers rendered to the screen in different corners! */}
       <GameDrawer games={MOTION_GAMES} label="Motion Games" position="top-left" />
+      <GameDrawer games={CIRCLE_ART_GAMES} label="Circle Art" position="top-right" tabColor="#cc2d42" />
       <GameDrawer games={EDUCATION_GAMES} label="Education Games" position="bottom-right" tabColor="#4a90e2" />
 
       <audio
