@@ -19,7 +19,7 @@ const SHOW_WAVES = false
 
 /* ======= Editable lists of game titles, URLs, and Descriptions ======= */
 const MOTION_GAMES = [
-  // 🚨 NEW: Added Halloween 2026 to the very top with an improved description!
+  { title: 'Happy Birthday To You!', href: 'https://funnyone7436.github.io/Happy-Birthday-To-You/', desc: 'Jump to trigger a massive confetti explosion, switch camera views, and celebrate with cheering and horns!' },
   { title: 'Halloween Game 2026', href: 'https://funnyone7436.github.io/Halloween-Game-2026/', desc: 'Jump high and wave your arms to grow your skeleton into a giant bobblehead and smash the spooky falling items!' },
   { title: 'Pokemon Pinball Machine', href: 'https://funnyone7436.github.io/Pokemon-Pinball-Machine/', desc: 'Jump to control the center ring and hit the Pokémon pinballs!' },
   { title: 'Jump for Joy, Bloom for Spring!', href: 'https://funnyone7436.github.io/Flowers-In-Spring/', desc: 'Jump to trigger a super bloom of colorful flowers on the car!' },
@@ -33,8 +33,9 @@ const MOTION_GAMES = [
   { title: 'Jumping Zombie Game', href: 'https://funnyone7436.github.io/zombie-jump-game/', desc: 'Wave both hands and jump to blast away the incoming zombies!' },
 ]
 
-// 🚨 NEW: The new Circle Art tab category!
+// 🚨 NEW: Moved Christmas 2026 here with a relaxing description!
 const CIRCLE_ART_GAMES = [
+  { title: 'Christmas 2026', href: 'https://funnyone7436.github.io/Christmas2026/', desc: 'Relax and interact with the magical Christmas scene! No motion needed, just sit back and enjoy.' },
   { title: 'Explore Four Seasons Town', href: 'https://funnyone7436.github.io/ExploreFourSeasonsTown/', desc: 'Drag, click, and interact to explore the magical 3D world of Four Seasons Town!' },
 ]
 
@@ -419,7 +420,6 @@ function SparkleLink({ href, children, label = 'Open link', size = 'md' }) {
 }
 
 /* ================= Configurable Game Drawer ================= */
-// 🚨 UPGRADED: GameDrawer now seamlessly handles top, bottom, left, and right positions!
 function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' }) {
   const [open, setOpen] = useState(false)
   
@@ -429,13 +429,7 @@ function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' 
   const [hoverInfo, setHoverInfo] = useState(null)
 
   const handleMouseEnterItem = (e, game) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    setHoverInfo({
-      desc: game.desc,
-      top: rect.top,
-      left: rect.right + 15,
-      right: window.innerWidth - rect.left + 15
-    })
+    setHoverInfo({ desc: game.desc })
   }
 
   const handleMouseLeaveItem = () => {
@@ -505,14 +499,14 @@ function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' 
         </div>
       </div>
 
-      {/* The Floating Description Popup */}
+      {/* 🚨 UI FIX: The Floating Description Popup is now fixed to top center */}
       <div
         style={{
           position: 'fixed',
-          top: hoverInfo ? hoverInfo.top : 0,
-          left: isLeft && hoverInfo ? hoverInfo.left : 'auto',
-          right: !isLeft && hoverInfo ? hoverInfo.right : 'auto',
-          width: 250,
+          top: 80, // Sits comfortably below the main title
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 'clamp(320px, 58vw, 720px)',
           background: 'linear-gradient(135deg, rgba(0, 5, 20, 0.9), rgba(0, 20, 40, 0.8))',
           color: '#00ffcc',
           padding: '14px 18px',
@@ -526,7 +520,8 @@ function GameDrawer({ games, label, position = 'top-left', tabColor = '#ff9a3c' 
           backdropFilter: 'blur(8px)',
           opacity: open && hoverInfo ? 1 : 0,
           pointerEvents: 'none',
-          transition: 'opacity 0.2s ease, top 0.1s ease',
+          transition: 'opacity 0.2s ease',
+          textAlign: 'center', 
           zIndex: 100, 
         }}
       >
@@ -700,7 +695,6 @@ export default function App() {
         </span>
       </div>
 
-      {/* 🚨 NEW: All 3 Drawers rendered to the screen in different corners! */}
       <GameDrawer games={MOTION_GAMES} label="Motion Games" position="top-left" />
       <GameDrawer games={CIRCLE_ART_GAMES} label="Circle Art" position="top-right" tabColor="#cc2d42" />
       <GameDrawer games={EDUCATION_GAMES} label="Education Games" position="bottom-right" tabColor="#4a90e2" />
